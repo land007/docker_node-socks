@@ -1,6 +1,18 @@
-const
-	socks5 = require('simple-socks'),
-	server = socks5.createServer();
+const socks5 = require('simple-socks');
+
+const USERNAME = process.env['USERNAME'] || 'land007';
+const PASSWORD = process.env['PASSWORD'] || '1234567';
+
+const options = {
+  authenticate : function (username, password, socket, callback) {
+    if (username === USERNAME && password === PASSWORD) {
+      return setImmediate(callback);
+    }
+    return setImmediate(callback, new Error('incorrect username and password'));
+  }
+};
+
+const server = socks5.createServer(options);
 
 // start listening!
 server.listen(1080);
